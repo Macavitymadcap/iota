@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "biome check .",
     "format": "biome format --write .",
-    "typecheck": "bun run --filter '*' typecheck"
+    "typecheck": "bun run --filter '*' typecheck",
+    "migrate": "bun apps/api/scripts/migrate.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.14",
