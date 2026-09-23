@@ -12,6 +12,7 @@ import {
 import { z } from "zod";
 import { ApiError } from "./api/errors";
 import { deviceQuery, devicesQuery } from "./api/queries";
+import { type ConnectionStatus, useDeviceEvents } from "./api/useDeviceEvents";
 import { ErrorMessage } from "./components/ErrorMessage";
 import { DeviceDetailPage } from "./pages/DeviceDetailPage";
 import { DeviceListPage } from "./pages/DeviceListPage";
@@ -19,7 +20,15 @@ import { NewDevicePage } from "./pages/NewDevicePage";
 
 type RouterContext = { queryClient: QueryClient };
 
+const CONNECTION_LABELS: Record<ConnectionStatus, string> = {
+  connecting: "Connecting…",
+  open: "Live",
+  closed: "Offline; reload to reconnect",
+};
+
 function RootLayout() {
+  const status = useDeviceEvents();
+
   return (
     <>
       <header className="site-header">
@@ -28,6 +37,9 @@ function RootLayout() {
             iota
           </Link>
           <Link to="/devices/new">Add device</Link>
+          <span className="connection" data-status={status} role="status">
+            {CONNECTION_LABELS[status]}
+          </span>
         </nav>
       </header>
       <main>

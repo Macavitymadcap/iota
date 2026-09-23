@@ -3,6 +3,7 @@ import { RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createAppRouter } from "./router";
+import "./styles/app.css";
 
 const queryClient = new QueryClient({
   // Until SSE arrives in 6c, data older than this refetches on navigation and window focus.

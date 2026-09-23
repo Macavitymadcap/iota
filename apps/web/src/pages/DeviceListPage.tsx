@@ -3,7 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { getRouteApi, Link } from "@tanstack/react-router";
 import { devicesQuery } from "../api/queries";
 import { ActionButtons } from "../components/ActionButtons";
-import { statusLabel, TYPE_LABELS, TYPE_LABELS_PLURAL } from "../lib/labels";
+import { isActive, statusLabel, TYPE_LABELS, TYPE_LABELS_PLURAL } from "../lib/labels";
 
 const route = getRouteApi("/");
 
@@ -58,7 +58,9 @@ export function DeviceListPage() {
                     {device.name}
                   </Link>
                   <span>{TYPE_LABELS[device.type]}</span>
-                  <span className="status">{statusLabel(device)}</span>
+                  <span className="status" data-active={isActive(device)}>
+                    {statusLabel(device)}
+                  </span>
                   <ActionButtons device={device} />
                 </li>
               ))}

@@ -2,6 +2,7 @@ import type {
   CreateDeviceInput,
   Device,
   DeviceAction,
+  DeviceEvent,
   DeviceType,
   UpdateDeviceInput,
 } from "@iota/shared";
@@ -38,7 +39,10 @@ export const deviceQuery = (id: string) =>
  * rather than refetched. Lists are invalidated, since a change can move a device between them.
  */
 function storeDevice(queryClient: QueryClient, device: Device): void {
-  queryClient.setQueryData(deviceQuery(device.id).queryKey, device);
+  const key = deviceQuery(device.id).queryKey;
+  const cached = queryClient.getQueryData(key);
+  // Responses and events can arrive in either order; never replace newer data with older.
+  if (!cached || cached.updatedAt <= device.updatedAt) queryClient.setQueryData(key, device);
   void queryClient.invalidateQueries({ queryKey: deviceKeys.lists() });
 }
 
@@ -74,4 +78,26 @@ export function useDeleteDevice() {
     mutationFn: (id: string) => unwrapEmpty(api.devices[":id"].$delete({ param: { id } })),
     onSuccess: () => void queryClient.invalidateQueries({ queryKey: deviceKeys.lists() }),
   });
+}
+
+/** Applies a server-sent event to the cache; the API remains the only source of truth. */
+export function applyDeviceEvent(queryClient: QueryClient, event: DeviceEvent): void {
+  switch (event.kind) {
+    case "created":
+    case "updated":
+      storeDevice(queryClient, event.device);
+      break;
+    case "deleted":
+      // Marked stale but not refetched: a tab viewing the device keeps showing it rather than
+      // flashing an error, and the tab that deleted it is already navigating away.
+      void queryClient.invalidateQueries({
+        queryKey: deviceKeys.detail(event.id),
+        refetchType: "none",
+      });
+      void queryClient.invalidateQueries({ queryKey: deviceKeys.lists() });
+      break;
+    case "resync":
+      void queryClient.invalidateQueries({ queryKey: deviceKeys.all });
+      break;
+  }
 }
