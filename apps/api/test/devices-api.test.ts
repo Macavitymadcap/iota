@@ -3,9 +3,10 @@ import { type CreateDeviceInput, Device, ProblemDetails } from "@iota/shared";
 import { testClient } from "hono/testing";
 import { createApp } from "../src/app";
 import { sql } from "../src/db";
+import { createDeviceEventBus } from "../src/events/bus";
 import { createDeviceRepository } from "../src/repositories/devices";
 
-const app = createApp({ sql, devices: createDeviceRepository(sql) });
+const app = createApp({ sql, devices: createDeviceRepository(sql), events: createDeviceEventBus(sql) });
 const client = testClient(app);
 
 /** Raw request, for inputs the typed client would refuse to compile. */

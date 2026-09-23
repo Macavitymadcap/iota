@@ -3,13 +3,16 @@ import { Hono } from "hono";
 import { problemResponse, toProblem } from "./http/problem";
 import type { DeviceRepository } from "./repositories/devices";
 import { devicesRoutes } from "./routes/devices";
+import { eventsRoutes } from "./routes/events";
+import type { DeviceEventBus } from "./events/bus";
 
 export type AppDependencies = {
   sql: SQL;
   devices: DeviceRepository;
+  events: DeviceEventBus;
 };
 
-export function createApp({ sql, devices }: AppDependencies) {
+export function createApp({ sql, devices, events }: AppDependencies) {
   const app = new Hono()
     .basePath("/api")
     .get("/health", async (c) => {
@@ -20,7 +23,8 @@ export function createApp({ sql, devices }: AppDependencies) {
         return problemResponse({ type: "about:blank", title: "Database unavailable", status: 503 });
       }
     })
-    .route("/devices", devicesRoutes(devices));
+    .route("/devices", devicesRoutes(devices))
+    .route("/events", eventsRoutes(events));
 
   app.onError((error) => problemResponse(toProblem(error)));
   app.notFound(() => problemResponse({ type: "about:blank", title: "Not found", status: 404 }));

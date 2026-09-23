@@ -1,6 +1,7 @@
 import { type CreateDevice, Device, type DeviceType, type UpdateDevice } from "@iota/shared";
 import type { SQL } from "bun";
 import { DeviceNotFound, TypeMismatch } from "../errors";
+import { publishDeviceEvent } from "../events/channel";
 
 export type DeviceFilters = {
   type?: DeviceType | undefined;
@@ -170,7 +171,9 @@ export function createDeviceRepository(db: SQL) {
             break;
         }
 
-        return findOrThrow(tx, id);
+        const device = await findOrThrow(tx, id);
+        await publishDeviceEvent(tx, { kind: "created", device });
+        return device;
       });
     },
 
@@ -217,7 +220,9 @@ export function createDeviceRepository(db: SQL) {
           }
         }
 
-        return findOrThrow(tx, id);
+        const device = await findOrThrow(tx, id);
+        await publishDeviceEvent(tx, { kind: "updated", device });
+        return device;
       });
     },
 
@@ -240,14 +245,20 @@ export function createDeviceRepository(db: SQL) {
             break;
         }
 
-        return findOrThrow(tx, id);
+        const device = await findOrThrow(tx, id);
+        await publishDeviceEvent(tx, { kind: "updated", device });
+        return device;
       });
     },
 
     /** Returns false when there was nothing to delete; subtype rows go by cascade. */
-    async delete(id: string): Promise<boolean> {
-      const rows: { id: string }[] = await db`DELETE FROM devices WHERE id = ${id} RETURNING id`;
-      return rows.length > 0;
+    delete(id: string): Promise<boolean> {
+      return db.begin(async (tx) => {
+        const rows: { id: string }[] = await tx`DELETE FROM devices WHERE id = ${id} RETURNING id`;
+        if (rows.length === 0) return false;
+        await publishDeviceEvent(tx, { kind: "deleted", id });
+        return true;
+      });
     },
   };
 }

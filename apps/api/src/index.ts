@@ -1,9 +1,13 @@
 import { createApp } from "./app";
 import { config } from "./config";
 import { sql } from "./db";
+import { createDeviceEventBus } from "./events/bus";
 import { createDeviceRepository } from "./repositories/devices";
 
-const app = createApp({ sql, devices: createDeviceRepository(sql) });
+const events = createDeviceEventBus(sql);
+await events.start();
+
+const app = createApp({ sql, devices: createDeviceRepository(sql), events });
 
 const server = Bun.serve({
   port: config.PORT,
