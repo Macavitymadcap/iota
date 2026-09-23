@@ -11,6 +11,7 @@
   "dependencies": {
     "@iota/shared": "workspace:*",
     "@tanstack/react-query": "^5.103.2",
+    "@tanstack/react-router": "^1.170.39",
     "hono": "^4.13.8",
     "open-props": "^1.7.23",
     "react": "^19.3.0",
