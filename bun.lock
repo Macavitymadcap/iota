@@ -11,6 +11,10 @@
     },
     "apps/api": {
       "name": "@iota/api",
+      "dependencies": {
+        "@iota/shared": "workspace:*",
+        "zod": "^4",
+      },
       "devDependencies": {
         "@types/bun": "latest",
       },
