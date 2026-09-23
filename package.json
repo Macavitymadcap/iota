@@ -1,0 +1,23 @@
+{
+  "name": "iota",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "bun run --filter '*' typecheck",
+    "migrate": "bun apps/api/scripts/migrate.ts",
+    "test": "bun run --filter '*' test",
+    "seed": "bun apps/api/scripts/seed.ts",
+    "dev": "bun run migrate && bun run dev:api",
+    "dev:api": "bun --watch apps/api/src/index.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "typescript": "7.0.2"
+  }
+}

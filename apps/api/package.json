@@ -1,0 +1,24 @@
+{
+  "name": "@iota/api",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  },
+  "dependencies": {
+    "@hono/zod-validator": "^0.9.1",
+    "@iota/shared": "workspace:*",
+    "hono": "^4.13.8",
+    "zod": "^4"
+  }
+}

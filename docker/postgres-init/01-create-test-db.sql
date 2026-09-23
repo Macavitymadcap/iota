@@ -1,0 +1,1 @@
+CREATE DATABASE iota_test OWNER iota;
