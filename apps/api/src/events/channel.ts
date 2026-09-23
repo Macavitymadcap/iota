@@ -1,5 +1,5 @@
-import type { SQL } from "bun";
 import type { DeviceEvent } from "@iota/shared";
+import type { SQL } from "bun";
 
 export const DEVICE_EVENTS_CHANNEL = "device_events";
 

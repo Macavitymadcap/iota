@@ -3,11 +3,12 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/app.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "bun test"
+    "test": "bun test",
+    "dev": "bun --env-file=../../.env --watch src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

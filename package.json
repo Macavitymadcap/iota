@@ -13,7 +13,7 @@
     "migrate": "bun apps/api/scripts/migrate.ts",
     "test": "bun run --filter '*' test",
     "seed": "bun apps/api/scripts/seed.ts",
-    "dev": "bun run migrate && bun run dev:api",
+    "dev": "bun run migrate && bun run --parallel --filter './apps/*' dev",
     "dev:api": "bun --watch apps/api/src/index.ts"
   },
   "devDependencies": {
