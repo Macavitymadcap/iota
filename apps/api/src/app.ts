@@ -1,10 +1,10 @@
 import type { SQL } from "bun";
 import { Hono } from "hono";
+import type { DeviceEventBus } from "./events/bus";
 import { problemResponse, toProblem } from "./http/problem";
 import type { DeviceRepository } from "./repositories/devices";
 import { devicesRoutes } from "./routes/devices";
 import { eventsRoutes } from "./routes/events";
-import type { DeviceEventBus } from "./events/bus";
 
 export type AppDependencies = {
   sql: SQL;
