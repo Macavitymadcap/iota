@@ -1,0 +1,17 @@
+{
+  "name": "iota",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "biome check .",
+    "format": "biome format --write ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "typescript": "7.0.2"
+  }
+}

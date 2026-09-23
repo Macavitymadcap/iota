@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: iota
+      POSTGRES_PASSWORD: iota
+      POSTGRES_DB: iota
+    ports:
+      - "5432:5432"
+    volumes:
+      - iota-data:/var/lib/postgresql/data
+      - ./docker/postgres-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U iota -d iota"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  iota-data:
