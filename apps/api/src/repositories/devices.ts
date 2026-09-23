@@ -1,5 +1,5 @@
-import type { SQL } from "bun";
 import { type CreateDevice, Device, type DeviceType, type UpdateDevice } from "@iota/shared";
+import type { SQL } from "bun";
 import { DeviceNotFound, TypeMismatch } from "../errors";
 
 export type DeviceFilters = {

@@ -1,4 +1,4 @@
-import type { DeviceType } from "@iota/shared";
+import type { DeviceAction, DeviceType } from "@iota/shared";
 
 export class DeviceNotFound extends Error {
   override readonly name = "DeviceNotFound";
@@ -17,5 +17,16 @@ export class TypeMismatch extends Error {
     readonly requested: DeviceType,
   ) {
     super(`Device ${id} is a ${actual}, but the request is for a ${requested}`);
+  }
+}
+
+export class UnsupportedAction extends Error {
+  override readonly name = "UnsupportedAction";
+
+  constructor(
+    readonly type: DeviceType,
+    readonly action: DeviceAction,
+  ) {
+    super(`A ${type} does not support the ${action} action`);
   }
 }

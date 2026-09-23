@@ -82,9 +82,9 @@ describe("update", () => {
 
   test("rejects a patch for a different device type", async () => {
     const light = await create({ type: "light", name: "Lamp" });
-    await expect(repo.update(light.id, { type: "camera", resolution: "4k" })).rejects.toBeInstanceOf(
-      TypeMismatch,
-    );
+    await expect(
+      repo.update(light.id, { type: "camera", resolution: "4k" }),
+    ).rejects.toBeInstanceOf(TypeMismatch);
   });
 
   test("throws DeviceNotFound for an unknown id", async () => {
