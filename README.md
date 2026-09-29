@@ -53,11 +53,6 @@ development and `iota_test` for the test suite. If port 5432 is already
 in use, change the mapping in `docker-compose.yml` to `"5433:5432"` and
 update both URLs in `.env`.
 
-On Fedora or another SELinux system, add `,Z` to the init-script volume
-in `docker-compose.yml` (`:ro,Z`), otherwise the container cannot read
-the script that creates `iota_test`. Reset with `docker compose down -v`
-if the container has already started without it.
-
 ### Scripts
 
 All scripts run from the repository root.
