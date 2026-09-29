@@ -35,13 +35,15 @@ changes made from other windows.
 bun install
 cp .env.example .env
 docker compose up -d
+bun run migrate
 bun run seed
 bun dev
 ```
 
-Open <http://localhost:5173>. `bun dev` applies any pending migrations,
-then runs the API on port 3000 and the Vite dev server on port 5173 in
-parallel; Vite proxies `/api` to the API. `bun run seed` is optional and
+Open <http://localhost:5173>. `bun run migrate` creates the schema;
+`bun dev` also applies any pending migrations each time it starts, then
+runs the API on port 3000 and the Vite dev server on port 5173 in
+parallel. Vite proxies `/api` to the API. `bun run seed` is optional and
 adds seven example devices across four rooms. It refuses to run against a
 database that already has devices; use `bun run seed --reset` to replace
 them.
